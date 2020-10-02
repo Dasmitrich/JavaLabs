@@ -52,8 +52,9 @@ class Manager implements EmployeePosition{
 
     @Override
     public double calcSalary() {
-        double temp = 115000 + (int)(Math.random()) * ((140000 - 115000) + 1);
+        double temp = Math.round(115000 + (Math.random()) * ((140000 - 115000) + 1));
         company.CompanyIncome += 0.95 * temp;
+        System.out.println(temp);
         return 0.05 * temp + 50000;
     }
 }
@@ -91,15 +92,15 @@ class Operator implements EmployeePosition{
 
 class company{
 
-    void hire (int pos, Employee em){
+    void hire (String pos, Employee em){
         switch (pos) {
-            case 1:  em.setFxsalary(new Manager().calcSalary());
+            case "Manager":  em.setFxsalary(new Manager().calcSalary());
                 em.setPosition(new Manager().getJobTitle());
                  break;
-            case 2:  em.setFxsalary(new TopManager().calcSalary());
+            case "Top Manager":  em.setFxsalary(new TopManager().calcSalary());
                 em.setPosition(new TopManager().getJobTitle());
                 break;
-            case 3:  em.setFxsalary(new Operator().calcSalary());
+            case "Operator":  em.setFxsalary(new Operator().calcSalary());
                 em.setPosition(new Operator().getJobTitle());
                 break;
         }
@@ -133,8 +134,14 @@ class company{
             }
         }
     }
+    void fire(int amount, List<Employee> employees){
+        for(int i=0; i<amount; i++) {
+                System.out.println(employees.get(i).getPosition() + " fired");
+                employees.remove(i);
+        }
+    }
 
-    void sortSalary(List<Employee> employees){
+    private void sortSalary(List<Employee> employees){
         for(int i=0; i < employees.size(); i++){
             for(int j=i; j < employees.size(); j++){
                 if(employees.get(i).getFxsalary() > employees.get(j).getFxsalary()){
@@ -168,15 +175,14 @@ class company{
     public static void main(String[] args) {
 
         List<Employee> employees = new ArrayList<Employee>();
-        Employee em = new Employee();
+        Employee e = new Employee();
         company c = new company();
 
-
-        c.hireAll("Top Manager",20, employees);
-        c.hireAll("Operator",15, employees);
+        c.hireAll("Manager",100, employees);
+        c.hireAll("Operator", 10, employees);
+        c.hireAll("Top Manager", 3, employees);
         System.out.println(employees.size());
         for(int i=0; i<employees.size(); i++) {
-            System.out.println(employees.get(i).getPosition() + " " + employees.get(i).getFxsalary());
             System.out.println(employees.get(i).getPosition() + " " + employees.get(i).getFxsalary());
             System.out.println();
         }
