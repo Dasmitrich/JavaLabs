@@ -54,7 +54,6 @@ class Manager implements EmployeePosition{
     public double calcSalary() {
         double temp = Math.round(115000 + (Math.random()) * ((140000 - 115000) + 1));
         company.CompanyIncome += 0.95 * temp;
-        System.out.println(temp);
         return 0.05 * temp + 50000;
     }
 }
