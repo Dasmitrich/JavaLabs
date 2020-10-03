@@ -2,8 +2,6 @@ package lab7;
 
 import java.util.*;
 
-import static com.sun.tools.javac.jvm.ByteCodes.jsr;
-import static com.sun.tools.javac.jvm.ByteCodes.swap;
 
 public class Employee {
     public double fxsalary;
@@ -185,6 +183,7 @@ class company{
             System.out.println(employees.get(i).getPosition() + " " + employees.get(i).getFxsalary());
             System.out.println();
         }
+        c.fire(43, employees);
         employees.clear();
         /*c.getTopSalaryStaff(employees, 10);
         for (int i=0; i<10; i++){
