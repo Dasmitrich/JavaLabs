@@ -107,32 +107,32 @@ public class Panel extends JPanel {
                         sym = '/';
                     }
 
-                if(temp == equal) {
+                    if(temp == equal) {
 
 
-                    num2 = Double.parseDouble(field.getText());
-                    field.setText(null);
+                        num2 = Double.parseDouble(field.getText());
+                        field.setText(null);
 
-                    switch (sym) {
-                        case '+':
-                            num1 += num2;
-                            field.setText(Double.toString(num1));
-                            break;
-                        case '-':
-                            num1 -= num2;
-                            field.setText(Double.toString(num1));
-                            break;
-                        case '*':
-                            num1 *= num2;
-                            field.setText(Double.toString(num1));
-                            break;
-                        case '/':
-                            if (num2 != 0.0)
-                                num1 /= num2;
-                            else
-                                System.err.println("Деление на ноль невозможно");
-                            field.setText(Double.toString(num1));
-                            break;
+                        switch (sym) {
+                            case '+':
+                                num1 += num2;
+                                field.setText(Double.toString(num1));
+                                break;
+                            case '-':
+                                num1 -= num2;
+                                field.setText(Double.toString(num1));
+                                break;
+                            case '*':
+                                num1 *= num2;
+                                field.setText(Double.toString(num1));
+                                break;
+                            case '/':
+                                if (num2 != 0.0)
+                                    num1 /= num2;
+                                else
+                                    System.err.println("Деление на ноль невозможно");
+                                field.setText(Double.toString(num1));
+                                break;
                         }
                     }
                 }
