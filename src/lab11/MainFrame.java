@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
 
 
 public class MainFrame extends JFrame {
@@ -21,6 +22,7 @@ public class MainFrame extends JFrame {
     Font myFont = new Font("Serif", Font.BOLD, 50);
     JButton buttons[] = {button1, button2, button3, button4, button5, button6, button7, button8, button9};
     Logic logic = new Logic();
+    int player = 1;
 
     public MainFrame() {
         add(panel1);
@@ -35,46 +37,56 @@ public class MainFrame extends JFrame {
 
                 JButton b;
                 b = (JButton) e.getSource();
-
-                switch (logic.cnt % 2) {
-                    case 0:
-                        b.setText("0");
-                        logic.EndOfGame(b);
-                        break;
-                    case 1:
-                        b.setText("X");
-                        logic.EndOfGame(b);
-                        break;
+                if(player == 1) {
+                     if(logic.cnt % 2 == 1){
+                           b.setText("X");
+                           logic.EndOfGameCheck();
+                           b.setEnabled(false);
+                    }
+                    if (logic.cnt % 2 == 0) {
+                        System.out.println("aiblock");
+                        new AiLogic().BotStep();
+                    }
                 }
-                b.setEnabled(false);
-                System.out.println(button1.getText());
+                if(player == 0){
+                        switch (logic.cnt % 2) {
+                            case 0:
+                                b.setText("0");
+                                logic.EndOfGameCheck();
+                                break;
+                            case 1:
+                                b.setText("X");
+                                logic.EndOfGameCheck();
+                                break;
+                        }
+                   b.setEnabled(false);
+                }
             }
         };
+
         for (int i = 0; i < 9; i++) {
             buttons[i].setFont(myFont);
             buttons[i].setText("*");
             buttons[i].addActionListener(btnListener);
         }
-        button1.setText("1");
-        button5.setText("1");
-        button9.setText("1");
     }
 
-    public class Logic{
+    class Logic{
         int cnt = 1;
 
-        public void EndOfGame(JButton button){
+        public void EndOfGameCheck(){
+
             cnt++;
 
-            if(
-                    button1.getText() == button2.getText() && button1.getText() == button3.getText()||
-                    button4.getText() == button5.getText() && button4.getText() == button6.getText()||
-                    button7.getText() == button8.getText() && button7.getText() == button9.getText()||
-                    button1.getText() == button5.getText() && button1.getText() == button9.getText()||
-                    button1.getText() == button4.getText() && button1.getText() == button7.getText()||
-                    button2.getText() == button5.getText() && button2.getText() == button9.getText()||
-                    button3.getText() == button6.getText() && button3.getText() == button9.getText()||
-                    button3.getText() == button5.getText() && button3.getText() == button7.getText()
+                if(
+                    (button1.getText() !="*" && (button1.getText() == button2.getText() && button1.getText() == button3.getText()))||
+                    (button4.getText() !="*" && (button4.getText() == button5.getText() && button4.getText() == button6.getText()))||
+                    (button7.getText() !="*" && (button7.getText() == button8.getText() && button7.getText() == button9.getText()))||
+                    (button1.getText() !="*" && (button1.getText() == button5.getText() && button1.getText() == button9.getText()))||
+                    (button1.getText() !="*" && (button1.getText() == button4.getText() && button1.getText() == button7.getText()))||
+                    (button2.getText() !="*" && (button2.getText() == button5.getText() && button2.getText() == button8.getText()))||
+                    (button3.getText() !="*" && (button3.getText() == button6.getText() && button3.getText() == button9.getText()))||
+                    (button3.getText() !="*" && (button3.getText() == button5.getText() && button3.getText() == button7.getText()))
             ) {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
@@ -97,4 +109,181 @@ public class MainFrame extends JFrame {
             }
         }
     }
+
+    class AiLogic {
+        int btnvalue[] = {20, 10, 20, 10, 30, 10, 20, 10, 20};
+        int[][] Paths = {{btnvalue[0], btnvalue[1], btnvalue[2]}, {btnvalue[3], btnvalue[4], btnvalue[5]},
+                {btnvalue[6], btnvalue[7], btnvalue[8]}, {btnvalue[0], btnvalue[4], btnvalue[8]},
+                {btnvalue[0], btnvalue[3], btnvalue[6]}, {btnvalue[1], btnvalue[4], btnvalue[7]},
+                {btnvalue[2], btnvalue[5], btnvalue[8]}, {btnvalue[2], btnvalue[4], btnvalue[6]}
+        };
+        int PathsValue[] = new int[8];
+
+        public void BotStep() {
+
+            for (int i = 0; i < 9; i++) {
+                if (buttons[i].getText() == "0")
+                    btnvalue[i] += 20;
+                else if (buttons[i].getText() == "X")
+                    btnvalue[i] = 0;
+            }
+
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 3; j++) {
+                    PathsValue[i] += Paths[i][j];
+                }
+            }
+
+            int bestPathValue = 0;
+            int n = 0;
+
+            for (int i = 0; i < 8; i++) {
+                if (bestPathValue < PathsValue[i]) {
+                    bestPathValue = PathsValue[i];
+                }
+            }
+
+            for(int i=0; i<8; i++){
+                if(bestPathValue == PathsValue[i])
+                    n++;
+            }
+
+            int bestChoice[] = new int[n];
+            n=0;
+            for(int i=0; i < 8; i++){
+                if(bestPathValue == PathsValue[i]) {
+                    bestChoice[n] = i;
+                    n++;
+                }
+            }
+
+            int bestFinalChoice = bestChoice[new Random().nextInt(bestChoice.length)];
+            System.out.println(bestFinalChoice);
+            switch (bestFinalChoice) {
+                case 0:
+                    if (button1.getText() != "0" && button1.getText() != "X") {
+                        button1.setText("0");
+                        button1.setEnabled(false);
+                    } else if (button3.getText() != "0" && button3.getText() != "X") {
+                        button3.setText("0");
+                        button3.setEnabled(false);
+                    } else if (button2.getText() != "0" && button2.getText() != "X") {
+                        button2.setText("0");
+                        button2.setEnabled(false);
+                    }
+                    break;
+                case 1:
+                    if (button4.getText() != "0" && button4.getText() != "X") {
+                        button4.setText("0");
+                        button4.setEnabled(false);
+                    } else if (button6.getText() != "0" && button6.getText() != "X") {
+                        button6.setText("0");
+                        button6.setEnabled(false);
+                    } else if (button5.getText() != "0" && button5.getText() != "X") {
+                        button5.setText("0");
+                        button5.setEnabled(false);
+                    }
+                    break;
+                case 2:
+                    if (button7.getText() != "0" && button7.getText() != "X") {
+                        button7.setText("0");
+                        button7.setEnabled(false);
+                    } else if (button8.getText() != "0" && button8.getText() != "X") {
+                        button8.setText("0");
+                        button8.setEnabled(false);
+                    } else if (button9.getText() != "0" && button9.getText() != "X") {
+                        button9.setText("0");
+                        button9.setEnabled(false);
+                    }
+                    break;
+                case 3:
+                    if (button1.getText() != "0" && button1.getText() != "X") {
+                        button1.setText("0");
+                        button1.setEnabled(false);
+                    } else if (button9.getText() != "0" && button9.getText() != "X") {
+                        button9.setText("0");
+                        button9.setEnabled(false);
+                    } else if (button5.getText() != "0" && button5.getText() != "X") {
+                        button5.setText("0");
+                        button5.setEnabled(false);
+                    }
+                    break;
+                case 4:
+                    if (button1.getText() != "0" && button1.getText() != "X") {
+                        button1.setText("0");
+                        button1.setEnabled(false);
+                    } else if (button7.getText() != "0" && button7.getText() != "X") {
+                        button7.setText("0");
+                        button7.setEnabled(false);
+                    } else if (button4.getText() != "0" && button4.getText() != "X") {
+                        button4.setText("0");
+                        button4.setEnabled(false);
+                    }
+                    break;
+                case 5:
+                    if (button2.getText() != "0" && button2.getText() != "X") {
+                        button2.setText("0");
+                        button2.setEnabled(false);
+                    } else if (button8.getText() != "0" && button8.getText() != "X") {
+                        button8.setText("0");
+                        button8.setEnabled(false);
+                    } else if (button5.getText() != "0" && button5.getText() != "X") {
+                        button5.setText("0");
+                        button5.setEnabled(false);
+                    }
+                    break;
+                case 6:
+                    if (button3.getText() != "0" && button3.getText() != "X") {
+                        button3.setText("0");
+                        button3.setEnabled(false);
+                    } else if (button9.getText() != "0" && button9.getText() != "X") {
+                        button9.setText("0");
+                        button9.setEnabled(false);
+                    } else if (button6.getText() != "0" && button6.getText() != "X") {
+                        button6.setText("0");
+                        button6.setEnabled(false);
+                    }
+                    break;
+                case 7:
+                    if (button3.getText() != "0" && button3.getText() != "X") {
+                        button3.setText("0");
+                        button3.setEnabled(false);
+                    } else if (button7.getText() != "0" && button7.getText() != "X") {
+                        button7.setText("0");
+                        button7.setEnabled(false);
+                    } else if (button5.getText() != "0" && button5.getText() != "X") {
+                        button5.setText("0");
+                        button5.setEnabled(false);
+                    }
+                    break;
+                default:
+                    System.out.println("no choices");
+                    break;
+            }
+
+            logic.EndOfGameCheck();
+    /*boolean buffer(int i){
+        int rnum = 0 + (int)(Math.random()*10);
+        if(rnum>5)
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    void nextStep() {
+        int i = 0;
+        boolean check = false;
+        if (button5.getText() != "*") {
+            while (check = false || i<4) {
+                check = buffer(i);
+                i++;
+            }
+            buttons[i].setText("X");
+        }
+    }*/
+        }
+    }
 }
+
