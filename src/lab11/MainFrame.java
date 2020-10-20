@@ -19,6 +19,7 @@ public class MainFrame extends JFrame {
     protected JButton button6;
     protected JButton button9;
 
+    boolean endOfGame= false;
     Font myFont = new Font("Serif", Font.BOLD, 50);
     JButton buttons[] = {button1, button2, button3, button4, button5, button6, button7, button8, button9};
     Logic logic = new Logic();
@@ -37,18 +38,18 @@ public class MainFrame extends JFrame {
 
                 JButton b;
                 b = (JButton) e.getSource();
-                if(player == 1) {
+                if(player == 1 && endOfGame==false) {
                      if(logic.cnt % 2 == 1){
                            b.setText("X");
                            logic.EndOfGameCheck();
                            b.setEnabled(false);
                     }
                     if (logic.cnt % 2 == 0) {
-                        System.out.println("aiblock");
+                        System.out.println("aistep");
                         new AiLogic().BotStep();
                     }
                 }
-                if(player == 0){
+                if(player == 0 && endOfGame==false){
                         switch (logic.cnt % 2) {
                             case 0:
                                 b.setText("0");
@@ -91,16 +92,18 @@ public class MainFrame extends JFrame {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
+                        endOfGame = true;
                         JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), cnt % 2 + 1 + " Player won!");
                         dispose();
                         new Run().main(null);
                     }
                 });
             }
-            if (cnt == 10) {
+            else if (cnt == 10) {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
+                        endOfGame = true;
                         JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Draw!");
                         dispose();
                         new Run().main(null);
@@ -111,27 +114,43 @@ public class MainFrame extends JFrame {
     }
 
     class AiLogic {
-        int btnvalue[] = {20, 10, 20, 10, 30, 10, 20, 10, 20};
-        int[][] Paths = {{btnvalue[0], btnvalue[1], btnvalue[2]}, {btnvalue[3], btnvalue[4], btnvalue[5]},
-                {btnvalue[6], btnvalue[7], btnvalue[8]}, {btnvalue[0], btnvalue[4], btnvalue[8]},
-                {btnvalue[0], btnvalue[3], btnvalue[6]}, {btnvalue[1], btnvalue[4], btnvalue[7]},
-                {btnvalue[2], btnvalue[5], btnvalue[8]}, {btnvalue[2], btnvalue[4], btnvalue[6]}
-        };
+        int btnvalue[] = {20, 10, 20, 10, 15, 10, 20, 10, 20};
         int PathsValue[] = new int[8];
 
         public void BotStep() {
 
             for (int i = 0; i < 9; i++) {
-                if (buttons[i].getText() == "0")
+                if (buttons[i].getText() == "0") {
                     btnvalue[i] += 20;
-                else if (buttons[i].getText() == "X")
+                    System.out.println("0: " + btnvalue[i]);
+                }
+                if (buttons[i].getText() == "X") {
                     btnvalue[i] = 0;
+                    System.out.println("X: " + btnvalue[i]);
+                }
+                /*if ((i > 0 && i < 7 && buttons[i - 1].getText() == "0" && buttons[i + 1].getText() != "X" && buttons[i + 2].getText() == "0") ||
+                        (i > 0 && i < 3 && buttons[i - 1].getText() == "0" && buttons[i + 3].getText() != "X" && buttons[i + 6].getText() == "0")) {
+                    btnvalue[i] += 50;
+                    System.out.println("diff: " + btnvalue[i]);
+                }*/
+                if (buttons[i].getText() == "*") {
+                    btnvalue[i] += 10;
+                    System.out.println("*: " + btnvalue[i]);
+                }
             }
+
+
+            int[][] Paths = {{btnvalue[0], btnvalue[1], btnvalue[2]}, {btnvalue[3], btnvalue[4], btnvalue[5]},
+                    {btnvalue[6], btnvalue[7], btnvalue[8]}, {btnvalue[0], btnvalue[4], btnvalue[8]},
+                    {btnvalue[0], btnvalue[3], btnvalue[6]}, {btnvalue[1], btnvalue[4], btnvalue[7]},
+                    {btnvalue[2], btnvalue[5], btnvalue[8]}, {btnvalue[2], btnvalue[4], btnvalue[6]}
+            };
 
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 3; j++) {
                     PathsValue[i] += Paths[i][j];
                 }
+                System.out.println("pathvalue:" + i + " " + PathsValue[i]);
             }
 
             int bestPathValue = 0;
@@ -143,117 +162,136 @@ public class MainFrame extends JFrame {
                 }
             }
 
-            for(int i=0; i<8; i++){
-                if(bestPathValue == PathsValue[i])
+            for (int i = 0; i < 8; i++) {
+                if (bestPathValue == PathsValue[i])
                     n++;
             }
 
             int bestChoice[] = new int[n];
-            n=0;
-            for(int i=0; i < 8; i++){
-                if(bestPathValue == PathsValue[i]) {
+            n = 0;
+            for (int i = 0; i < 8; i++) {
+                if (bestPathValue == PathsValue[i]) {
                     bestChoice[n] = i;
+                    System.out.println("choice: " + bestChoice[n]);
                     n++;
                 }
             }
-
+            botSetButton(bestChoice);
+        }
+        void botSetButton(int bestChoice[]){
             int bestFinalChoice = bestChoice[new Random().nextInt(bestChoice.length)];
             System.out.println(bestFinalChoice);
             switch (bestFinalChoice) {
                 case 0:
-                    if (button1.getText() != "0" && button1.getText() != "X") {
+                    if (button1.getText() != "0" && button1.getText() != "X" && button1.isEnabled()) {
                         button1.setText("0");
                         button1.setEnabled(false);
-                    } else if (button3.getText() != "0" && button3.getText() != "X") {
+                    } else if (button3.getText() != "0" && button3.getText() != "X"&& button3.isEnabled()) {
                         button3.setText("0");
                         button3.setEnabled(false);
-                    } else if (button2.getText() != "0" && button2.getText() != "X") {
+                    } else if (button2.getText() != "0" && button2.getText() != "X"&& button2.isEnabled()) {
                         button2.setText("0");
                         button2.setEnabled(false);
+                    }else {
+                        botSetButton(bestChoice);
                     }
                     break;
                 case 1:
-                    if (button4.getText() != "0" && button4.getText() != "X") {
+                    if (button4.getText() != "0" && button4.getText() != "X"&& button4.isEnabled()) {
                         button4.setText("0");
                         button4.setEnabled(false);
-                    } else if (button6.getText() != "0" && button6.getText() != "X") {
+                    } else if (button6.getText() != "0" && button6.getText() != "X"&& button6.isEnabled()) {
                         button6.setText("0");
                         button6.setEnabled(false);
-                    } else if (button5.getText() != "0" && button5.getText() != "X") {
+                    } else if (button5.getText() != "0" && button5.getText() != "X"&& button5.isEnabled()) {
                         button5.setText("0");
                         button5.setEnabled(false);
+                    }else {
+                        botSetButton(bestChoice);
                     }
                     break;
                 case 2:
-                    if (button7.getText() != "0" && button7.getText() != "X") {
+                    if (button7.getText() != "0" && button7.getText() != "X"&& button7.isEnabled()) {
                         button7.setText("0");
                         button7.setEnabled(false);
-                    } else if (button8.getText() != "0" && button8.getText() != "X") {
+                    } else if (button8.getText() != "0" && button8.getText() != "X"&& button8.isEnabled()) {
                         button8.setText("0");
                         button8.setEnabled(false);
-                    } else if (button9.getText() != "0" && button9.getText() != "X") {
+                    } else if (button9.getText() != "0" && button9.getText() != "X"&& button9.isEnabled()) {
                         button9.setText("0");
                         button9.setEnabled(false);
+                    }else {
+                        botSetButton(bestChoice);
                     }
                     break;
                 case 3:
-                    if (button1.getText() != "0" && button1.getText() != "X") {
+                    if (button1.getText() != "0" && button1.getText() != "X"&& button1.isEnabled()) {
                         button1.setText("0");
                         button1.setEnabled(false);
-                    } else if (button9.getText() != "0" && button9.getText() != "X") {
+                    } else if (button9.getText() != "0" && button9.getText() != "X"&& button9.isEnabled()) {
                         button9.setText("0");
                         button9.setEnabled(false);
-                    } else if (button5.getText() != "0" && button5.getText() != "X") {
+                    } else if (button5.getText() != "0" && button5.getText() != "X"&& button5.isEnabled()) {
                         button5.setText("0");
                         button5.setEnabled(false);
+                    }else {
+                        botSetButton(bestChoice);
                     }
                     break;
                 case 4:
-                    if (button1.getText() != "0" && button1.getText() != "X") {
+                    if (button1.getText() != "0" && button1.getText() != "X"&& button1.isEnabled()) {
                         button1.setText("0");
                         button1.setEnabled(false);
-                    } else if (button7.getText() != "0" && button7.getText() != "X") {
+                    } else if (button7.getText() != "0" && button7.getText() != "X"&& button7.isEnabled()) {
                         button7.setText("0");
                         button7.setEnabled(false);
-                    } else if (button4.getText() != "0" && button4.getText() != "X") {
+                    } else if (button4.getText() != "0" && button4.getText() != "X"&& button4.isEnabled()) {
                         button4.setText("0");
                         button4.setEnabled(false);
+                    }else {
+                        botSetButton(bestChoice);
                     }
                     break;
                 case 5:
-                    if (button2.getText() != "0" && button2.getText() != "X") {
+                    if (button2.getText() != "0" && button2.getText() != "X"&& button2.isEnabled()) {
                         button2.setText("0");
                         button2.setEnabled(false);
-                    } else if (button8.getText() != "0" && button8.getText() != "X") {
+                    } else if (button8.getText() != "0" && button8.getText() != "X"&& button8.isEnabled()) {
                         button8.setText("0");
                         button8.setEnabled(false);
-                    } else if (button5.getText() != "0" && button5.getText() != "X") {
+                    } else if (button5.getText() != "0" && button5.getText() != "X"&& button5.isEnabled()) {
                         button5.setText("0");
                         button5.setEnabled(false);
+                    }else {
+                        botSetButton(bestChoice);
                     }
                     break;
                 case 6:
-                    if (button3.getText() != "0" && button3.getText() != "X") {
+                    if (button3.getText() != "0" && button3.getText() != "X"&& button3.isEnabled()) {
                         button3.setText("0");
                         button3.setEnabled(false);
-                    } else if (button9.getText() != "0" && button9.getText() != "X") {
+                    } else if (button9.getText() != "0" && button9.getText() != "X"&& button9.isEnabled()) {
                         button9.setText("0");
                         button9.setEnabled(false);
-                    } else if (button6.getText() != "0" && button6.getText() != "X") {
+                    } else if (button6.getText() != "0" && button6.getText() != "X"&& button6.isEnabled()) {
                         button6.setText("0");
                         button6.setEnabled(false);
+                    }else {
+                        botSetButton(bestChoice);
                     }
                     break;
                 case 7:
-                    if (button3.getText() != "0" && button3.getText() != "X") {
+                    if (button3.getText() != "0" && button3.getText() != "X" && button3.isEnabled()) {
                         button3.setText("0");
                         button3.setEnabled(false);
-                    } else if (button7.getText() != "0" && button7.getText() != "X") {
+                    } else if (button7.getText() != "0" && button7.getText() != "X" && button7.isEnabled()) {
                         button7.setText("0");
                         button7.setEnabled(false);
-                    } else if (button5.getText() != "0" && button5.getText() != "X") {
+                    } else if (button5.getText() != "0" && button5.getText() != "X" && button5.isEnabled()) {
                         button5.setText("0");
                         button5.setEnabled(false);
+                    } else {
+                        botSetButton(bestChoice);
                     }
                     break;
                 default:
@@ -262,27 +300,6 @@ public class MainFrame extends JFrame {
             }
 
             logic.EndOfGameCheck();
-    /*boolean buffer(int i){
-        int rnum = 0 + (int)(Math.random()*10);
-        if(rnum>5)
-        {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    void nextStep() {
-        int i = 0;
-        boolean check = false;
-        if (button5.getText() != "*") {
-            while (check = false || i<4) {
-                check = buffer(i);
-                i++;
-            }
-            buttons[i].setText("X");
-        }
-    }*/
         }
     }
 }
