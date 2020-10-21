@@ -5,5 +5,4 @@ public class Run {
         MainFrame frame = new MainFrame();
         frame.setVisible(true);
     }
-    //пока только режим двух игроков - к пятнице сделаю игру с компьютером
 }
