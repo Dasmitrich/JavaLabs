@@ -22,7 +22,7 @@ public class MainFrame extends JFrame {
     Font myFont = new Font("Serif", Font.BOLD, 50);
     JButton buttons[] = {button1, button2, button3, button4, button5, button6, button7, button8, button9};
     Logic logic = new Logic();
-    int player = 1;
+    int player = 1; // 0 - игра pvp; 1 - игра с компьютером
     int cicleShield = 0;
 
     public MainFrame() {
@@ -74,7 +74,6 @@ public class MainFrame extends JFrame {
 
     class Logic{
         int cnt = 1;
-        boolean endOfGame= false;
 
         public void EndOfGameCheck(){
 
@@ -82,14 +81,14 @@ public class MainFrame extends JFrame {
             System.out.println("cnt++");
 
                 if(
-                        ((button1.getText() !="*" && (button1.getText() == button2.getText() && button1.getText() == button3.getText()))||
+                        (button1.getText() !="*" && (button1.getText() == button2.getText() && button1.getText() == button3.getText()))||
                     (button4.getText() !="*" && (button4.getText() == button5.getText() && button4.getText() == button6.getText()))||
                     (button7.getText() !="*" && (button7.getText() == button8.getText() && button7.getText() == button9.getText()))||
                     (button1.getText() !="*" && (button1.getText() == button5.getText() && button1.getText() == button9.getText()))||
                     (button1.getText() !="*" && (button1.getText() == button4.getText() && button1.getText() == button7.getText()))||
                     (button2.getText() !="*" && (button2.getText() == button5.getText() && button2.getText() == button8.getText()))||
                     (button3.getText() !="*" && (button3.getText() == button6.getText() && button3.getText() == button9.getText()))||
-                    (button3.getText() !="*" && (button3.getText() == button5.getText() && button3.getText() == button7.getText()))) && !endOfGame
+                    (button3.getText() !="*" && (button3.getText() == button5.getText() && button3.getText() == button7.getText()))
             ) {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
@@ -97,11 +96,10 @@ public class MainFrame extends JFrame {
                             JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), cnt % 2 + 1 + " Player won!");
                             dispose();
                             new Run().main(null);
-                            endOfGame = true;
                     }
                 });
             }
-            else if (cnt == 10 && !endOfGame) {
+            else if (cnt == 10) {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
