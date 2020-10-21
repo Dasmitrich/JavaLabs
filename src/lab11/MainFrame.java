@@ -19,11 +19,11 @@ public class MainFrame extends JFrame {
     protected JButton button6;
     protected JButton button9;
 
-    boolean endOfGame= false;
     Font myFont = new Font("Serif", Font.BOLD, 50);
     JButton buttons[] = {button1, button2, button3, button4, button5, button6, button7, button8, button9};
     Logic logic = new Logic();
     int player = 1;
+    int cicleShield = 0;
 
     public MainFrame() {
         add(panel1);
@@ -38,7 +38,7 @@ public class MainFrame extends JFrame {
 
                 JButton b;
                 b = (JButton) e.getSource();
-                if(player == 1 && endOfGame==false) {
+                if(player == 1) {
                      if(logic.cnt % 2 == 1){
                            b.setText("X");
                            logic.EndOfGameCheck();
@@ -49,7 +49,7 @@ public class MainFrame extends JFrame {
                         new AiLogic().BotStep();
                     }
                 }
-                if(player == 0 && endOfGame==false){
+                if(player == 0){
                         switch (logic.cnt % 2) {
                             case 0:
                                 b.setText("0");
@@ -74,39 +74,40 @@ public class MainFrame extends JFrame {
 
     class Logic{
         int cnt = 1;
+        boolean endOfGame= false;
 
         public void EndOfGameCheck(){
 
             cnt++;
+            System.out.println("cnt++");
 
                 if(
-                    (button1.getText() !="*" && (button1.getText() == button2.getText() && button1.getText() == button3.getText()))||
+                        ((button1.getText() !="*" && (button1.getText() == button2.getText() && button1.getText() == button3.getText()))||
                     (button4.getText() !="*" && (button4.getText() == button5.getText() && button4.getText() == button6.getText()))||
                     (button7.getText() !="*" && (button7.getText() == button8.getText() && button7.getText() == button9.getText()))||
                     (button1.getText() !="*" && (button1.getText() == button5.getText() && button1.getText() == button9.getText()))||
                     (button1.getText() !="*" && (button1.getText() == button4.getText() && button1.getText() == button7.getText()))||
                     (button2.getText() !="*" && (button2.getText() == button5.getText() && button2.getText() == button8.getText()))||
                     (button3.getText() !="*" && (button3.getText() == button6.getText() && button3.getText() == button9.getText()))||
-                    (button3.getText() !="*" && (button3.getText() == button5.getText() && button3.getText() == button7.getText()))
+                    (button3.getText() !="*" && (button3.getText() == button5.getText() && button3.getText() == button7.getText()))) && !endOfGame
             ) {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        endOfGame = true;
-                        JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), cnt % 2 + 1 + " Player won!");
-                        dispose();
-                        new Run().main(null);
+                            JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), cnt % 2 + 1 + " Player won!");
+                            dispose();
+                            new Run().main(null);
+                            endOfGame = true;
                     }
                 });
             }
-            else if (cnt == 10) {
+            else if (cnt == 10 && !endOfGame) {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        endOfGame = true;
-                        JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Draw!");
-                        dispose();
-                        new Run().main(null);
+                            JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Draw!");
+                            dispose();
+                            new Run().main(null);
                     }
                 });
             }
@@ -121,20 +122,15 @@ public class MainFrame extends JFrame {
 
             for (int i = 0; i < 9; i++) {
                 if (buttons[i].getText() == "0") {
-                    btnvalue[i] += 20;
+                    btnvalue[i] += 30;
                     System.out.println("0: " + btnvalue[i]);
                 }
                 if (buttons[i].getText() == "X") {
                     btnvalue[i] = 0;
                     System.out.println("X: " + btnvalue[i]);
                 }
-                /*if ((i > 0 && i < 7 && buttons[i - 1].getText() == "0" && buttons[i + 1].getText() != "X" && buttons[i + 2].getText() == "0") ||
-                        (i > 0 && i < 3 && buttons[i - 1].getText() == "0" && buttons[i + 3].getText() != "X" && buttons[i + 6].getText() == "0")) {
-                    btnvalue[i] += 50;
-                    System.out.println("diff: " + btnvalue[i]);
-                }*/
                 if (buttons[i].getText() == "*") {
-                    btnvalue[i] += 10;
+                    btnvalue[i] += 5;
                     System.out.println("*: " + btnvalue[i]);
                 }
             }
@@ -154,13 +150,16 @@ public class MainFrame extends JFrame {
             }
 
             int bestPathValue = 0;
+            int worstPathValue = 100;
             int n = 0;
 
             for (int i = 0; i < 8; i++) {
-                if (bestPathValue < PathsValue[i]) {
+                if (bestPathValue < PathsValue[i])
                     bestPathValue = PathsValue[i];
-                }
+                if (worstPathValue > PathsValue[i])
+                    worstPathValue = PathsValue[i];
             }
+            System.out.println("worst value: "+ worstPathValue);
 
             for (int i = 0; i < 8; i++) {
                 if (bestPathValue == PathsValue[i])
@@ -176,109 +175,116 @@ public class MainFrame extends JFrame {
                     n++;
                 }
             }
-            botSetButton(bestChoice);
+
+            botSetButton(bestChoice, worstPathValue, cicleShield);
         }
-        void botSetButton(int bestChoice[]){
+
+        void botSetButton(int[] bestChoice, int worstPathValue, int cicleShield) {
+            cicleShield++;
+
             int bestFinalChoice = bestChoice[new Random().nextInt(bestChoice.length)];
+
+            if (cicleShield > 2) {
+                bestFinalChoice = worstPathChoose(worstPathValue);
+                System.out.println("using of worst value: " + bestFinalChoice);
+            }
+
             System.out.println(bestFinalChoice);
+
             switch (bestFinalChoice) {
                 case 0:
                     if (button1.getText() != "0" && button1.getText() != "X" && button1.isEnabled()) {
                         button1.setText("0");
                         button1.setEnabled(false);
-                    } else if (button3.getText() != "0" && button3.getText() != "X"&& button3.isEnabled()) {
+                    } else if (button3.getText() != "0" && button3.getText() != "X" && button3.isEnabled()) {
                         button3.setText("0");
                         button3.setEnabled(false);
-                    } else if (button2.getText() != "0" && button2.getText() != "X"&& button2.isEnabled()) {
+                    } else if (button2.getText() != "0" && button2.getText() != "X" && button2.isEnabled()) {
                         button2.setText("0");
                         button2.setEnabled(false);
-                    }else {
-                        botSetButton(bestChoice);
-                    }
+                    } else if(cicleShield<2)
+                        botSetButton(bestChoice, worstPathValue, cicleShield);
                     break;
                 case 1:
-                    if (button4.getText() != "0" && button4.getText() != "X"&& button4.isEnabled()) {
+                    if (button4.getText() != "0" && button4.getText() != "X" && button4.isEnabled()) {
                         button4.setText("0");
                         button4.setEnabled(false);
-                    } else if (button6.getText() != "0" && button6.getText() != "X"&& button6.isEnabled()) {
+                    } else if (button6.getText() != "0" && button6.getText() != "X" && button6.isEnabled()) {
                         button6.setText("0");
                         button6.setEnabled(false);
-                    } else if (button5.getText() != "0" && button5.getText() != "X"&& button5.isEnabled()) {
+                    } else if (button5.getText() != "0" && button5.getText() != "X" && button5.isEnabled()) {
                         button5.setText("0");
                         button5.setEnabled(false);
-                    }else {
-                        botSetButton(bestChoice);
-                    }
+                    } else if(cicleShield<2)
+                        botSetButton(bestChoice, worstPathValue, cicleShield);
                     break;
                 case 2:
-                    if (button7.getText() != "0" && button7.getText() != "X"&& button7.isEnabled()) {
+                    if (button7.getText() != "0" && button7.getText() != "X" && button7.isEnabled()) {
                         button7.setText("0");
                         button7.setEnabled(false);
-                    } else if (button8.getText() != "0" && button8.getText() != "X"&& button8.isEnabled()) {
+                    } else if (button8.getText() != "0" && button8.getText() != "X" && button8.isEnabled()) {
                         button8.setText("0");
                         button8.setEnabled(false);
-                    } else if (button9.getText() != "0" && button9.getText() != "X"&& button9.isEnabled()) {
+                    } else if (button9.getText() != "0" && button9.getText() != "X" && button9.isEnabled()) {
                         button9.setText("0");
                         button9.setEnabled(false);
-                    }else {
-                        botSetButton(bestChoice);
-                    }
+                    } else if(cicleShield<2)
+                        botSetButton(bestChoice, worstPathValue, cicleShield);
                     break;
                 case 3:
-                    if (button1.getText() != "0" && button1.getText() != "X"&& button1.isEnabled()) {
+                    if (button1.getText() != "0" && button1.getText() != "X" && button1.isEnabled()) {
                         button1.setText("0");
                         button1.setEnabled(false);
-                    } else if (button9.getText() != "0" && button9.getText() != "X"&& button9.isEnabled()) {
+                    } else if (button9.getText() != "0" && button9.getText() != "X" && button9.isEnabled()) {
                         button9.setText("0");
                         button9.setEnabled(false);
-                    } else if (button5.getText() != "0" && button5.getText() != "X"&& button5.isEnabled()) {
+                    } else if (button5.getText() != "0" && button5.getText() != "X" && button5.isEnabled()) {
                         button5.setText("0");
                         button5.setEnabled(false);
-                    }else {
-                        botSetButton(bestChoice);
-                    }
+                    } else if(cicleShield<2)
+                        botSetButton(bestChoice, worstPathValue, cicleShield);
+
                     break;
                 case 4:
-                    if (button1.getText() != "0" && button1.getText() != "X"&& button1.isEnabled()) {
+                    if (button1.getText() != "0" && button1.getText() != "X" && button1.isEnabled()) {
                         button1.setText("0");
                         button1.setEnabled(false);
-                    } else if (button7.getText() != "0" && button7.getText() != "X"&& button7.isEnabled()) {
+                    } else if (button7.getText() != "0" && button7.getText() != "X" && button7.isEnabled()) {
                         button7.setText("0");
                         button7.setEnabled(false);
-                    } else if (button4.getText() != "0" && button4.getText() != "X"&& button4.isEnabled()) {
+                    } else if (button4.getText() != "0" && button4.getText() != "X" && button4.isEnabled()) {
                         button4.setText("0");
                         button4.setEnabled(false);
-                    }else {
-                        botSetButton(bestChoice);
-                    }
+                    } else if(cicleShield<2)
+                        botSetButton(bestChoice, worstPathValue, cicleShield);
                     break;
                 case 5:
-                    if (button2.getText() != "0" && button2.getText() != "X"&& button2.isEnabled()) {
+                    if (button2.getText() != "0" && button2.getText() != "X" && button2.isEnabled()) {
                         button2.setText("0");
                         button2.setEnabled(false);
-                    } else if (button8.getText() != "0" && button8.getText() != "X"&& button8.isEnabled()) {
+                    } else if (button8.getText() != "0" && button8.getText() != "X" && button8.isEnabled()) {
                         button8.setText("0");
                         button8.setEnabled(false);
-                    } else if (button5.getText() != "0" && button5.getText() != "X"&& button5.isEnabled()) {
+                    } else if (button5.getText() != "0" && button5.getText() != "X" && button5.isEnabled()) {
                         button5.setText("0");
                         button5.setEnabled(false);
-                    }else {
-                        botSetButton(bestChoice);
-                    }
+                    }else if(cicleShield<2)
+                        botSetButton(bestChoice, worstPathValue, cicleShield);
+
                     break;
                 case 6:
-                    if (button3.getText() != "0" && button3.getText() != "X"&& button3.isEnabled()) {
+                    if (button3.getText() != "0" && button3.getText() != "X" && button3.isEnabled()) {
                         button3.setText("0");
                         button3.setEnabled(false);
-                    } else if (button9.getText() != "0" && button9.getText() != "X"&& button9.isEnabled()) {
+                    } else if (button9.getText() != "0" && button9.getText() != "X" && button9.isEnabled()) {
                         button9.setText("0");
                         button9.setEnabled(false);
-                    } else if (button6.getText() != "0" && button6.getText() != "X"&& button6.isEnabled()) {
+                    } else if (button6.getText() != "0" && button6.getText() != "X" && button6.isEnabled()) {
                         button6.setText("0");
                         button6.setEnabled(false);
-                    }else {
-                        botSetButton(bestChoice);
-                    }
+                    } else if(cicleShield<2)
+                        botSetButton(bestChoice, worstPathValue, cicleShield);
+
                     break;
                 case 7:
                     if (button3.getText() != "0" && button3.getText() != "X" && button3.isEnabled()) {
@@ -290,17 +296,32 @@ public class MainFrame extends JFrame {
                     } else if (button5.getText() != "0" && button5.getText() != "X" && button5.isEnabled()) {
                         button5.setText("0");
                         button5.setEnabled(false);
-                    } else {
-                        botSetButton(bestChoice);
-                    }
-                    break;
-                default:
-                    System.out.println("no choices");
+                    } else if(cicleShield<2)
+                        botSetButton(bestChoice, worstPathValue, cicleShield);
                     break;
             }
+            if(cicleShield<2)
+                logic.EndOfGameCheck();
+                System.out.println("cnt: " + logic.cnt);
+            }
 
-            logic.EndOfGameCheck();
+            int worstPathChoose(int worstPathValue){
+            int n =0;
+            for (int i = 0; i < 8; i++) {
+                if (worstPathValue == PathsValue[i])
+                    n++;
+            }
+
+            int bestChoice[] = new int[n];
+            n = 0;
+            for (int i = 0; i < 8; i++) {
+                if (worstPathValue == PathsValue[i]) {
+                    bestChoice[n] = i;
+                    n++;
+                }
+            }
+            int WorstPath = bestChoice[new Random().nextInt(bestChoice.length)];
+            return WorstPath;
         }
     }
 }
-
