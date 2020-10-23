@@ -16,7 +16,6 @@ public class Panel extends JPanel {
     private JButton divide = new JButton("/");
     private JButton minus = new JButton("-");
     private  JButton dot = new JButton(".");
-    private  boolean dotcheck = false;
     private double num1 = 0;
     private double num2 = 0;
     private char sym;
@@ -69,10 +68,9 @@ public class Panel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                dot.setEnabled(true);
                 JButton temp = new JButton();
                 temp = (JButton) e.getSource();
-
-
 
                 String str = field.getText();
                 if(str.length()!=0) {
@@ -106,9 +104,12 @@ public class Panel extends JPanel {
                         field.setText(null);
                         sym = '/';
                     }
+                    if(temp == dot){
+                        field.setText(field.getText() + ".");
+                        dot.setEnabled(false);
+                    }
 
                     if(temp == equal) {
-
 
                         num2 = Double.parseDouble(field.getText());
                         field.setText(null);
@@ -151,13 +152,15 @@ public class Panel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 JButton b = new JButton();
                 b = (JButton) e.getSource();
-                field.setText(field.getText() + b.getText());
+                if(b == dot)
+                    dot.setEnabled(false);
 
+                field.setText(field.getText() + b.getText());
             }
         };
         for(JButton but: numbers){
             but.addActionListener(numListener);
         }
-        dot.addActionListener(numListener);
+        dot.addActionListener(operListener);
     }
 }
