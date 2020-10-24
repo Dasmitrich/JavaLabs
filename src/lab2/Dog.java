@@ -48,7 +48,7 @@ class PytomnicSobak{
         System.out.print("Write down amount of dogs: ");
         size = in.nextInt();
         System.out.println();
-        in.skip(".*\n");
+        in.skip(".*\n");                             //очистка буфера
         Dog[] dogs = new Dog[size];
 
         for(int i=0; i< dogs.length; i++){
