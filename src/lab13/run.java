@@ -1,9 +1,11 @@
 package lab13;
 
+import java.util.ArrayList;
+
 public class run {
     public static void main(String[] args) {
 
-        TodoList work = new TodoList();
+        new TodoList().RunApp();
 
     }
 } // В РАЗРАБОТКЕ

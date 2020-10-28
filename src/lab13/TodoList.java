@@ -1,7 +1,6 @@
 package lab13;
 
-import org.w3c.dom.ls.LSOutput;
-
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -11,37 +10,37 @@ public class TodoList {
     использовать библиотеку hashmap, map;
      */
     public ArrayList<String> catalogue = new ArrayList<>();
+    public static int i = 0;
 
-    TodoList() {
+    public void RunApp() {
         Scanner in = new Scanner(System.in);
         String str = in.nextLine();
         String temp[];
         temp = str.split(" ");
 
-        for (int i = 0; i < temp.length; i++) {
+
+        System.out.println(temp.length);
+
+        for (i = 0; i < temp.length; i++) {
             switch (temp[i]) {
                 case "ADD":
-                    System.out.println(i);
-                    if(temp[i+2].charAt(0) >= '0' && temp[i+2].charAt(0) <= '9') {
-                        Add(temp[i++], Integer.parseInt(temp[i += 2]));
-                        i += 3;
+                    if(temp[i+1].charAt(0) >= '0' && temp[i+1].charAt(0) <= '9') {
+                        Add(temp, Integer.parseInt(temp[i+1]));
                     }
                     else {
-                        Add(temp[i++]);
-                        i+=2;
+                        Add(temp);
                     }
-                    System.out.println(i);
                     break;
                 case "LIST":
                     List();
                     break;
                 case "EDIT":
-                    Edit(temp[i++] ,Integer.parseInt(temp[i+=2]));
-                    i+=3;
+                    Edit(temp ,Integer.parseInt(temp[i+1]), i);
                     break;
                 case "DELETE":
-                    Delete(Integer.parseInt(temp[i++]));
-                    i+=2;
+                    i++;
+                    Delete(Integer.parseInt(temp[i]));
+                    i++;
                     break;
                 default:
                     System.err.println("Неверный формат ввода");
@@ -51,26 +50,45 @@ public class TodoList {
 
     void List() {
         for (int i = 0; i < catalogue.size(); i++) {
-            System.out.println("дело номер " + i + ":" + catalogue.get(i));
+            System.out.println("дело номер " + i + ": " + catalogue.get(i));
         }
     }
 
-    String Delete(int num){
+    void Delete(int num){
         catalogue.remove(num);
-        return "Дело номер " + num + "удалено.";
+        System.out.println("Дело номер " + num + "удалено.");
     }
 
-    String Add(String text, int position){
-        catalogue.add(position, text);
-        return "Дебавлено на позицию: " + position;
+    void Add(String[] temp, int position){
+        String text = null;
+
+            i+=2;
+            if(temp[i].equals("ADD") && temp[i].equals("EDIT") && temp[i].equals("DELETE") && temp[i].equals("LIST")){
+            text = temp[i];
+            i++;
+            }
+            catalogue.add(position, text);
+
+        System.out.println("Добавлено на позицию: " + position);
     }
-    String Add(String text){
+    void Add(String[] temp){
+        String text = new String();
+
+        while(!temp[i].equals("ADD") && !temp[i].equals("EDIT") && !temp[i].equals("DELETE") && !temp[i].equals("LIST")){
+            System.out.println(temp[i] + " added");
+            text += temp[i];
+            System.out.println(text);
+            if(i!=temp.length)
+                i++;
+        }
+
         catalogue.add(text);
-        return "Дебавлено в конец";
+        System.out.println("Добавлено в конец: " + i);
     }
-    String Edit(String text, int num){
+
+    void Edit(String[] temp, int num, int i){
         catalogue.remove(num);
-        catalogue.add(num, text);
-        return "Дело номер: " + num + "заменено.";
+        System.out.println("Дело номер: " + num + "заменено.");
+        Add(temp, num);
     }
 }

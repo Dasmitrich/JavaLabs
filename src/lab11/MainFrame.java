@@ -24,6 +24,7 @@ public class MainFrame extends JFrame {
     Logic logic = new Logic();
     int player = 1; // 0 - игра pvp; 1 - игра с компьютером
     int cicleShield = 0;
+    boolean rule = false;
 
     public MainFrame() {
         add(panel1);
@@ -111,21 +112,21 @@ public class MainFrame extends JFrame {
     }
 
     class AiLogic {
-        int btnvalue[] = {20, 10, 20, 10, 10, 10, 20, 10, 20};
-        int PathsValue[] = new int[8];
+        int[] btnvalue = {20, 10, 20, 10, 10, 10, 20, 10, 20};
+        int[] PathsValue = new int[8];
 
         public void BotStep() {
 
             for (int i = 0; i < 9; i++) {
-                if (buttons[i].getText() == "0") {
+                if (buttons[i].getText().equals("0")) {
                     btnvalue[i] += 30;
                     System.out.println("0: " + btnvalue[i]);
                 }
-                if (buttons[i].getText() == "X") {
+                if (buttons[i].getText().equals("X")) {
                     btnvalue[i] = 0;
                     System.out.println("X: " + btnvalue[i]);
                 }
-                if (buttons[i].getText() == "*") {
+                if (buttons[i].getText().equals("*")) {
                     btnvalue[i] += 15;
                     System.out.println("*: " + btnvalue[i]);
                 }
