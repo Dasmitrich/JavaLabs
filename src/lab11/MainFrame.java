@@ -95,7 +95,6 @@ public class MainFrame extends JFrame {
                     public void run() {
                             JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), cnt % 2 + 1 + " Player won!");
                             dispose();
-                            new Run().main(null);
                     }
                 });
             }
@@ -105,7 +104,6 @@ public class MainFrame extends JFrame {
                     public void run() {
                             JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Draw!");
                             dispose();
-                            new Run().main(null);
                     }
                 });
             }
@@ -113,7 +111,7 @@ public class MainFrame extends JFrame {
     }
 
     class AiLogic {
-        int btnvalue[] = {20, 10, 20, 10, 15, 10, 20, 10, 20};
+        int btnvalue[] = {20, 10, 20, 10, 10, 10, 20, 10, 20};
         int PathsValue[] = new int[8];
 
         public void BotStep() {
@@ -128,7 +126,7 @@ public class MainFrame extends JFrame {
                     System.out.println("X: " + btnvalue[i]);
                 }
                 if (buttons[i].getText() == "*") {
-                    btnvalue[i] += 5;
+                    btnvalue[i] += 15;
                     System.out.println("*: " + btnvalue[i]);
                 }
             }
@@ -200,7 +198,7 @@ public class MainFrame extends JFrame {
                     } else if (button2.getText() != "0" && button2.getText() != "X" && button2.isEnabled()) {
                         button2.setText("0");
                         button2.setEnabled(false);
-                    } else if(cicleShield<2)
+                    } else if(cicleShield<3)
                         botSetButton(bestChoice, worstPathValue, cicleShield);
                     break;
                 case 1:
@@ -213,7 +211,7 @@ public class MainFrame extends JFrame {
                     } else if (button5.getText() != "0" && button5.getText() != "X" && button5.isEnabled()) {
                         button5.setText("0");
                         button5.setEnabled(false);
-                    } else if(cicleShield<2)
+                    } else if(cicleShield<3)
                         botSetButton(bestChoice, worstPathValue, cicleShield);
                     break;
                 case 2:
@@ -226,7 +224,7 @@ public class MainFrame extends JFrame {
                     } else if (button9.getText() != "0" && button9.getText() != "X" && button9.isEnabled()) {
                         button9.setText("0");
                         button9.setEnabled(false);
-                    } else if(cicleShield<2)
+                    } else if(cicleShield<3)
                         botSetButton(bestChoice, worstPathValue, cicleShield);
                     break;
                 case 3:
@@ -239,7 +237,7 @@ public class MainFrame extends JFrame {
                     } else if (button5.getText() != "0" && button5.getText() != "X" && button5.isEnabled()) {
                         button5.setText("0");
                         button5.setEnabled(false);
-                    } else if(cicleShield<2)
+                    } else if(cicleShield<3)
                         botSetButton(bestChoice, worstPathValue, cicleShield);
 
                     break;
@@ -253,7 +251,7 @@ public class MainFrame extends JFrame {
                     } else if (button4.getText() != "0" && button4.getText() != "X" && button4.isEnabled()) {
                         button4.setText("0");
                         button4.setEnabled(false);
-                    } else if(cicleShield<2)
+                    } else if(cicleShield<3)
                         botSetButton(bestChoice, worstPathValue, cicleShield);
                     break;
                 case 5:
@@ -266,7 +264,7 @@ public class MainFrame extends JFrame {
                     } else if (button5.getText() != "0" && button5.getText() != "X" && button5.isEnabled()) {
                         button5.setText("0");
                         button5.setEnabled(false);
-                    }else if(cicleShield<2)
+                    }else if(cicleShield<3)
                         botSetButton(bestChoice, worstPathValue, cicleShield);
 
                     break;
@@ -280,7 +278,7 @@ public class MainFrame extends JFrame {
                     } else if (button6.getText() != "0" && button6.getText() != "X" && button6.isEnabled()) {
                         button6.setText("0");
                         button6.setEnabled(false);
-                    } else if(cicleShield<2)
+                    } else if(cicleShield<3)
                         botSetButton(bestChoice, worstPathValue, cicleShield);
 
                     break;
@@ -294,7 +292,7 @@ public class MainFrame extends JFrame {
                     } else if (button5.getText() != "0" && button5.getText() != "X" && button5.isEnabled()) {
                         button5.setText("0");
                         button5.setEnabled(false);
-                    } else if(cicleShield<2)
+                    } else if(cicleShield<3)
                         botSetButton(bestChoice, worstPathValue, cicleShield);
                     break;
             }
