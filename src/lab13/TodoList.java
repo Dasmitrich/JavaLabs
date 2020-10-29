@@ -19,8 +19,6 @@ public class TodoList {
         String temp[];
         temp = str.split(" ");
 
-        System.out.println(temp.length);
-
         for (i = 0; i < temp.length; i++) {
             switch (temp[i]) {
                 case "ADD":
@@ -40,8 +38,7 @@ public class TodoList {
                     Edit(temp ,Integer.parseInt(temp[i+1]));
                     break;
                 case "DELETE":
-                    i++;
-                    Delete(Integer.parseInt(temp[i]));
+                    Delete(Integer.parseInt(temp[i+1]));
                     break;
                 default:
                     System.err.println("Неверный формат ввода");
@@ -59,6 +56,7 @@ public class TodoList {
     void Delete(int num){
         catalogue.remove(num);
         System.out.println("Дело номер: " + num + " - удалено");
+        i++;
     }
 
     void Add(String[] temp, int position){
