@@ -10,7 +10,7 @@ public class TodoList {
     использовать библиотеку hashmap, map;
      */
     public ArrayList<String> catalogue = new ArrayList<>();
-    int i=0;
+    private int i=0;
 
 
     public void RunApp() {
@@ -59,47 +59,40 @@ public class TodoList {
         i++;
     }
 
-    void Add(String[] temp, int position){
+    private String addCheck(String[] temp){
         String text = "";
 
-        i++;
-            do{
-                i++;
-                //System.out.println(temp[i] + " added " + i);
-                text += temp[i] + " ";
-            } while ( i+1 < temp.length && !temp[i+1].equals("ADD") && !temp[i+1].equals("EDIT") && !temp[i+1].equals("DELETE") && !temp[i+1].equals("LIST"));
+        do{
+            i++;
+            //System.out.println(temp[i] + " added " + i);
+            text += temp[i] + " ";
+        } while ( i+1 < temp.length && !temp[i+1].equals("ADD") && !temp[i+1].equals("EDIT") && !temp[i+1].equals("DELETE") && !temp[i+1].equals("LIST"));
+        return text;
+    }
 
-            catalogue.add(position, text);
+    void Add(String[] temp, int position){
+        i++;
+
+        String text = addCheck(temp);
+
+        catalogue.add(position, text);
         System.out.println("Добавлено на позицию: " + position +  " - " + text);
     }
     void Add(String[] temp){
-        String text = "";
-        i++;
 
-        do{
-            //System.out.println(temp[i] + " added");
-            text += temp[i] + " ";
-            i++;
-        }while (!temp[i].equals("ADD") && !temp[i].equals("EDIT") && !temp[i].equals("DELETE") && !temp[i].equals("LIST"));
-        i--;
+        String text = addCheck(temp);
 
         catalogue.add(text);
         System.out.println("Добавлено в конец: " + text);
     }
 
     void Edit(String[] temp, int num){
-        String text = "";
-        i+=2;
 
-        while ( !temp[i].equals("ADD") && !temp[i].equals("EDIT") && !temp[i].equals("DELETE") && !temp[i].equals("LIST")){
-            //System.out.println(temp[i] + " added");
-            text += temp[i] + " ";
-            i++;
-        }
+        i++;
+        String text = addCheck(temp);
 
         catalogue.set(num, text);
         System.out.println("Дело номер: " + num + " - заменено");
-        i--;
     }
 
 }

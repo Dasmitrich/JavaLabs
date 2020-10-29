@@ -3,7 +3,7 @@ package lab12;
 import java.util.Scanner;
 
 public class PhoneNumber {
-    public static void main(String[] args) {
+    public void PhoneNumberEdit() {
         String str;
         Scanner in = new Scanner(System.in);
 
@@ -28,5 +28,9 @@ public class PhoneNumber {
             System.out.println("+7 (" + number.substring(1,4) + ") " + number.substring(4,7) + "-" + number.substring(7,9) + "-" + number.substring(9,11));
         else
             System.err.println("Неверный формат номера");
+    }
+
+    public static void main(String[] args) {
+        new PhoneNumber().PhoneNumberEdit();
     }
 }
