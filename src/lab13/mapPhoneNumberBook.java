@@ -17,9 +17,6 @@ public class mapPhoneNumberBook {
         this.phoneNumbersStore.put("+7 (155) 233-90-09", "Дементьев Неси Свиней");
     }
 
-    String getUser(String number){
-        return phoneNumbersStore.get(number);
-    }
 
     String addName(String number){
         String result = "";
@@ -63,7 +60,7 @@ public class mapPhoneNumberBook {
 
     void userCheckNumber(String number){
         String exists;
-        exists = (phoneNumbersStore.containsKey(number))? getUser(number) : addName(number);
+        exists = (phoneNumbersStore.containsKey(number))? phoneNumbersStore.get(number) : addName(number);
 
         System.out.println(exists);
     }
