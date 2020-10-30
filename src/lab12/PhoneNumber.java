@@ -3,11 +3,11 @@ package lab12;
 import java.util.Scanner;
 
 public class PhoneNumber {
-    public void PhoneNumberEdit() {
-        String str;
+    public String PhoneNumberEdit(String str) {
+        /*String str;
         Scanner in = new Scanner(System.in);
 
-        str = in.nextLine();
+        str = in.nextLine();*/
         String number = new String();
 
         int cnt = 0;
@@ -18,19 +18,18 @@ public class PhoneNumber {
                         cnt++;
                     }
                 } else {
-                    System.err.println("Неверный формат номера");
-                    return;
+                    return ("Неверный формат номера");
                 }
             }
         if(number.length() == 10 && number.charAt(0) == '9')
-            System.out.println("+7 (" + number.substring(0,3) + ") " + number.substring(3,6) + "-" + number.substring(6,8) + "-" + number.substring(8,10));
+            return ("+7 (" + number.substring(0,3) + ") " + number.substring(3,6) + "-" + number.substring(6,8) + "-" + number.substring(8,10));
         else if(number.length() == 11 && number.charAt(0) == '8' || number.charAt(0) == '7')
-            System.out.println("+7 (" + number.substring(1,4) + ") " + number.substring(4,7) + "-" + number.substring(7,9) + "-" + number.substring(9,11));
+            return ("+7 (" + number.substring(1,4) + ") " + number.substring(4,7) + "-" + number.substring(7,9) + "-" + number.substring(9,11));
         else
-            System.err.println("Неверный формат номера");
+            return ("Неверный формат номера");
     }
 
     public static void main(String[] args) {
-        new PhoneNumber().PhoneNumberEdit();
+        new PhoneNumber().PhoneNumberEdit(null);
     }
 }
