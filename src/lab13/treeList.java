@@ -13,10 +13,10 @@ public class treeList {
 
         for (int i = 0; i < str.length(); i++) {
             //System.out.println(str.charAt(i));
-            if(str.charAt(i) == '@'){
+            if(!at && str.charAt(i) == '@'){
                 at = true;
             }
-            else if(at && str.charAt(i) == '@' || str.charAt(i) == '@' && str.charAt(i+1) == '.' || str.charAt(i) == '.' && str.charAt(i+1) == '@') {
+            else if((at && str.charAt(i) == '@') || (str.charAt(i) == '@' && str.charAt(i+1) == '.') || (str.charAt(i) == '.' && str.charAt(i+1) == '@') || (str.charAt(i) == '.' && str.charAt(i+1) == '.')) {
                 id = false;
             }
             else if(!dot && at && str.charAt(i) == '.' ){
