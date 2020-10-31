@@ -23,18 +23,21 @@ public class TodoList {
 
     public void RunApp() {
         Scanner in = new Scanner(System.in);
-        String str = in.nextLine();
+        String str;
         String temp[];
-        temp = str.split(" ");
 
+        boolean work = true;
+
+        while(work){
+            str = in.nextLine();
+            temp = str.split(" ");
         for (i = 0; i < temp.length; i++) {
             switch (temp[i]) {
                 case "ADD":
-                   // System.out.println("from add " + temp[i+1].charAt(0));
-                    if(temp[i+1].charAt(0) >= '0' && temp[i+1].charAt(0) <='9' && i+1< temp.length) {
-                        Add(temp, Integer.parseInt(temp[i+1]));
-                    }
-                    else {
+                    // System.out.println("from add " + temp[i+1].charAt(0));
+                    if (temp[i + 1].charAt(0) >= '0' && temp[i + 1].charAt(0) <= '9' && i + 1 < temp.length) {
+                        Add(temp, Integer.parseInt(temp[i + 1]));
+                    } else {
                         Add(temp);
                     }
                     break;
@@ -43,10 +46,13 @@ public class TodoList {
                     List();
                     break;
                 case "EDIT":
-                    Edit(temp ,Integer.parseInt(temp[i+1]));
+                    Edit(temp, Integer.parseInt(temp[i + 1]));
                     break;
                 case "DELETE":
-                    Delete(Integer.parseInt(temp[i+1]));
+                    Delete(Integer.parseInt(temp[i + 1]));
+                case "-1":
+                    work = false;
+                 }
             }
         }
 
@@ -90,6 +96,7 @@ public class TodoList {
             System.out.println("Добавлено на позицию: " + position + " - " + text);
         } else {
             System.out.println("Список составляет меньшую длину!");
+            i++;
             Add(temp);
         }
     }

@@ -2,21 +2,27 @@ package lab13;
 
 import java.util.Scanner;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class treeList {
     private TreeSet<String> mailList = new TreeSet<>();
 
-    void checkMail(String str){
+    void checkMail(String str, Pattern pattern){
         boolean dot = false;
         boolean at = false;
         boolean id = true;
+        Matcher matcher;
+
 
         for (int i = 0; i < str.length(); i++) {
             //System.out.println(str.charAt(i));
             if(!at && str.charAt(i) == '@'){
                 at = true;
+            }else if((str.charAt(i)<97 && str.charAt(i)>122) || (str.charAt(i)<65 && str.charAt(i)>90)){
+                id = false;
             }
-            else if((at && str.charAt(i) == '@') || (str.charAt(i) == '@' && str.charAt(i+1) == '.') || (str.charAt(i) == '.' && str.charAt(i+1) == '@') || (str.charAt(i) == '.' && str.charAt(i+1) == '.')) {
+            else if( ((str.charAt(i) == '.' && i+1 >= str.length()) || (at && str.charAt(i) == '@') || (str.charAt(i) == '@' && str.charAt(i+1) == '.') || (str.charAt(i) == '.' && str.charAt(i+1) == '@'))) {
                 id = false;
             }
             else if(!dot && at && str.charAt(i) == '.' ){
@@ -26,17 +32,16 @@ public class treeList {
                 id = false;
             }
         }
-        if(!dot || !at)
-            id = false;
-
-        if(id) {
+        matcher = pattern.matcher(str);
+        boolean found = matcher.matches();
+        if (found)
+        {
             mailList.add(str);
             System.out.println("Добавлено");
-        }
-        else
+        } else
             System.err.println("Неверный адрес");
     }
-    void read(){
+    void read(Pattern pattern){
         String str;
         Scanner in = new Scanner(System.in);
         boolean work = true;
@@ -49,7 +54,7 @@ public class treeList {
             switch (temp[i]) {
                 case "ADD":
                     i++;
-                    checkMail(temp[i]);
+                    checkMail(temp[i], pattern);
                     break;
                 case "LIST":
                     System.out.println();
@@ -69,7 +74,9 @@ public class treeList {
     }
 
     public static void main(String[] args) {
-       new treeList().read();
+        Pattern pattern;
+        pattern = Pattern.compile("^([A-Za-z0-9]{1,}[\\\\.-]{0,1}[A-Za-z0-9]{1,})+@([A-Za-z0-9]{1,}[\\\\.-]{0,1}[A-Za-z0-9]{1,})+[\\\\.]{1}[a-z]{2,4}$");
+       new treeList().read(pattern);
        //ADD ex@gmail.com ADD ex.@gmail.com ADD ex@gmail.c.om LIST
     }
 }
