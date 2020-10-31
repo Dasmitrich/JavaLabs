@@ -50,8 +50,10 @@ public class TodoList {
                     break;
                 case "DELETE":
                     Delete(Integer.parseInt(temp[i + 1]));
+                    break;
                 case "-1":
                     work = false;
+                    break;
                  }
             }
         }
