@@ -3,11 +3,11 @@ package lab12;
 import java.util.Scanner;
 
 public class PhoneNumber {
-    public String PhoneNumberEdit(String str) {
-        /*String str;
+    public String PhoneNumberEdit(String stro) {
+        String str;
         Scanner in = new Scanner(System.in);
 
-        str = in.nextLine();*/
+        str = in.nextLine();
         String number = new String();
 
         int cnt = 0;
@@ -30,6 +30,8 @@ public class PhoneNumber {
     }
 
     public static void main(String[] args) {
-        new PhoneNumber().PhoneNumberEdit(null);
+
+        System.out.println(new PhoneNumber().PhoneNumberEdit(null));  
+
     }
 }
