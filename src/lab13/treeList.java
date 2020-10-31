@@ -39,26 +39,33 @@ public class treeList {
     void read(){
         String str;
         Scanner in = new Scanner(System.in);
-        str = in.nextLine();
-        String[] temp = str.split(" ");
+        boolean work = true;
+
+        do{
+            str = in.nextLine();
+            String[] temp = str.split(" ");
 
         for(int i=0; i<temp.length; i++){
-            switch (temp[i]){
+            switch (temp[i]) {
                 case "ADD":
                     i++;
                     checkMail(temp[i]);
                     break;
                 case "LIST":
                     System.out.println();
-                    for(String mail: mailList){
+                    for (String mail : mailList) {
                         System.out.println(mail);
                     }
+                    break;
+                case "-1":
+                    work = false;
                     break;
                 default:
                     System.err.println("Неверная команда");
                     break;
+                }
             }
-        }
+        } while(work);
     }
 
     public static void main(String[] args) {

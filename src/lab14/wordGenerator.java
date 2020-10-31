@@ -8,29 +8,27 @@ public class wordGenerator {
     private ArrayList<String> carNumbers = new ArrayList<>();
 
     char genWord(){
-        char word = patternNumbers[new Random().nextInt(patternNumbers.length)];
-        return  word;
+        return patternNumbers[new Random().nextInt(patternNumbers.length)];
     }
 
     String genNum(){
-       int num = new Random().nextInt(199);
-
-       return String.valueOf(num)+String.valueOf(num)+String.valueOf(num);
+       int num = new Random().nextInt(9);
+       return String.valueOf(num) + String.valueOf(num) + String.valueOf(num);
     }
 
     String genRegn(){
-        char regn = genWord();
-        return String.valueOf(regn)+String.valueOf(regn);
+        int num = new Random().nextInt(199);
+        return String.valueOf(num);
     }
 
     void combine(){
-        System.out.println(genWord()+ " "+ genNum()+ " " + genRegn());
+        System.out.println(genWord()+ " "+ genNum()+ " " + genWord() + " " + genWord() + " " + genRegn());
 
     }
+
 
 
     public static void main(String[] args) {
         new wordGenerator().combine();
-
     }
 }

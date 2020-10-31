@@ -47,9 +47,6 @@ public class TodoList {
                     break;
                 case "DELETE":
                     Delete(Integer.parseInt(temp[i+1]));
-                    break;
-                default:
-                    System.err.println("Неверный формат ввода");
             }
         }
 
@@ -62,9 +59,14 @@ public class TodoList {
     }
 
     void Delete(int num){
-        catalogue.remove(num);
-        System.out.println("Дело номер: " + num + " - удалено");
-        i++;
+        if(num < catalogue.size()) {
+            catalogue.remove(num);
+            System.out.println("Дело номер: " + num + " - удалено");
+            i++;
+        } else {
+            System.out.println("Дело не найдено!");
+            i++;
+        }
     }
 
     private String addCheck(String[] temp){
@@ -79,12 +81,17 @@ public class TodoList {
     }
 
     void Add(String[] temp, int position){
-        i++;
+        if(position < catalogue.size()) {
+            i++;
 
-        String text = addCheck(temp);
+            String text = addCheck(temp);
 
-        catalogue.add(position, text);
-        System.out.println("Добавлено на позицию: " + position +  " - " + text);
+            catalogue.add(position, text);
+            System.out.println("Добавлено на позицию: " + position + " - " + text);
+        } else {
+            System.out.println("Список составляет меньшую длину!");
+            Add(temp);
+        }
     }
     void Add(String[] temp){
 
@@ -95,12 +102,16 @@ public class TodoList {
     }
 
     void Edit(String[] temp, int num){
+        if(num < catalogue.size()) {
+            i++;
+            String text = addCheck(temp);
 
-        i++;
-        String text = addCheck(temp);
-
-        catalogue.set(num, text);
-        System.out.println("Дело номер: " + num + " - заменено");
+            catalogue.set(num, text);
+            System.out.println("Дело номер: " + num + " - заменено");
+        } else {
+            i++;
+            System.out.println("Данная позиция не найдена!");
+        }
     }
 
 }
