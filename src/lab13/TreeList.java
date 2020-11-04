@@ -5,7 +5,7 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class treeList {
+public class TreeList {
     private TreeSet<String> mailList = new TreeSet<>();
 
     void checkMail(String str, Pattern pattern){
@@ -76,7 +76,7 @@ public class treeList {
     public static void main(String[] args) {
         Pattern pattern;
         pattern = Pattern.compile("^([A-Za-z0-9]{1,}[\\\\.-]{0,1}[A-Za-z0-9]{1,})+@([A-Za-z0-9]{1,}[\\\\.-]{0,1}[A-Za-z0-9]{1,})+[\\\\.]{1}[a-z]{2,4}$");
-       new treeList().read(pattern);
+       new TreeList().read(pattern);
        //ADD ex@gmail.com ADD ex.@gmail.com ADD ex@gmail.c.om LIST
     }
 }

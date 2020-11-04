@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class mapPhoneNumberBook {
+public class MapPhoneNumberBook {
 
     private HashMap<String, String> phoneNumbersStore = new HashMap<>();
 
-    mapPhoneNumberBook(){
+    MapPhoneNumberBook(){
         this.phoneNumbersStore.put("+7 (495) 210-49-57", "Леопольдова Зинаида Петровна");
         this.phoneNumbersStore.put("+7 (977) 590-27-54", "Борисенко Альберт Вигенович");
         this.phoneNumbersStore.put("+7 (155) 233-90-09", "Дементьев Неси Свиней");
@@ -105,7 +105,7 @@ public class mapPhoneNumberBook {
     }
 
     public static void main(String[] args) {
-        mapPhoneNumberBook book = new mapPhoneNumberBook();
+        MapPhoneNumberBook book = new MapPhoneNumberBook();
         book.runApp();
     }
 }
