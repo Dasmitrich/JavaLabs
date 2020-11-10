@@ -185,9 +185,5 @@ class company{
         }
         c.fire(43, employees);
         employees.clear();
-        /*c.getTopSalaryStaff(employees, 10);
-        for (int i=0; i<10; i++){
-            System.out.println(employees.get(i).getFxsalary());
-        }*/
     }
 }

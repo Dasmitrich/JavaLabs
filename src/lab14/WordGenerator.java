@@ -21,7 +21,7 @@ public class WordGenerator {
     }
 
     void combine(){
-        for(int i=0; i<20000; i++){
+        for(int i=0; i<30000; i++){
             String temp = genWord() + genNum() + genWord() + genWord() + genRegn();
             if(!carNumbers.contains(temp))
             carNumbers.add(temp);
