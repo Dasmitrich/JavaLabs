@@ -3,32 +3,23 @@ package lab14;
 import java.util.*;
 
 public class WordGenerator {
-    private char[] patternNumbers = {'A', 'B', 'E', 'K', 'M', 'H', 'O', 'P', 'C', 'T', 'Y', 'X'};
+    //ПРОГРАММА СЧИТЫВАЕТ ТОЛЬКО БУКВЫ НА АНГЛИЙСКОЙ РАСКЛАДКЕ
+    private String[] patternWords = {"A", "B", "E", "K", "M", "H", "O", "P", "C", "T", "Y", "X"};
+    private String[] patternNumbers = {"000", "111", "222", "333", "444", "555", "666", "777", "888", "999"};
     private ArrayList<String> carNumbers = new ArrayList<>();
 
-    char genWord(){
-        return patternNumbers[new Random().nextInt(patternNumbers.length)];
-    }
-
-    String genNum(){
-       int num = new Random().nextInt(9);
-       return String.valueOf(num) + String.valueOf(num) + String.valueOf(num);
-    }
-
-    String genRegn(){
-        int num = new Random().nextInt(199);
-        return String.valueOf(num);
-    }
-
     void combine(){
-        for(int i=0; i<30000; i++){
-            String temp = genWord() + genNum() + genWord() + genWord() + genRegn();
-            if(!carNumbers.contains(temp))
-            carNumbers.add(temp);
-            else
-                i--;
+        for(int i=0; i<12; i++){
+            for(int j=0; j<10; j++){
+                for(int k=0; k<12; k++){
+                    for(int l=0; l<12; l++){
+                        for (int m=1; m<200; m++){
+                            carNumbers.add(patternWords[i] + patternNumbers[j] + patternWords[k] + patternWords[l] + String.valueOf(m));
+                        }
+                    }
+                }
+            }
         }
-        carNumbers.add("A222BH113");
 
         System.out.println("Enter your number: ");
         String temp = new Scanner(System.in).nextLine();
