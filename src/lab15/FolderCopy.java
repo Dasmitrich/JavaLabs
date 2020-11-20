@@ -45,6 +45,6 @@ public class FolderCopy {
 
         FolderCopy cpy = new FolderCopy();
         cpy.copyFile(new File(pathOriginal), new File(pathDestination));
-        new Folder().folder("файлы скопированы\n", pathDestination);
+        new Folder().folder("файлы скопированы\n", pathDestination, pathOriginal);
     }
 }

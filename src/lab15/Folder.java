@@ -9,17 +9,23 @@ import java.util.Scanner;
 
 public class Folder {
 
-    public static void folder(String input, String fpath) throws IOException {
-        File fileDir = new File(fpath);
+    public static void folder(String fpath, String input, String dest) throws IOException {
+        String fpath1 = "C:\\Users\\My-PC\\IdeaProjects\\Javalabs\\src\\lab15\\log.txt";
+        File fileDir = new File(fpath1);
 
         if(!fileDir.exists())
             fileDir.mkdir();
 
-        fpath += "\\log.txt";
+        FileOutputStream out = new FileOutputStream(fileDir, true);
 
-        FileOutputStream out = new FileOutputStream(fpath, true);
-
+        fpath+="\n";
+        input+="\n";
+        dest+="\n";
+        out.write(fpath.getBytes());
         out.write(input.getBytes());
+        out.write(dest.getBytes());
+        out.close();
+        out.close();
         out.close();
         System.out.println("added log");
     }
@@ -59,7 +65,7 @@ public class Folder {
         long size = F.folderSize(dir);
 
         String weight = F.converter(size);
-        F.folder("folder: " + pathDir + " weights " + weight, pathDir);
+        F.folder("folder: " + pathDir + " weights " + weight, " ", " ");
 
         System.out.println("Размер папки " + pathDir + " составляет " + weight);
     }
