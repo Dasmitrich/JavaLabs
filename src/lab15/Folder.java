@@ -10,11 +10,9 @@ import java.util.Scanner;
 public class Folder {
 
     public static void folder(String fpath, String input, String dest) throws IOException {
-        String fpath1 = "C:\\Users\\My-PC\\IdeaProjects\\Javalabs\\src\\lab15\\log.txt";
-        File fileDir = new File(fpath1);
 
-        if(!fileDir.exists())
-            fileDir.mkdir();
+        new File((System.getProperty("user.dir"))+"\\logger").mkdir();
+        File fileDir = new File(System.getProperty("user.dir")+"\\logger\\log.txt");
 
         FileOutputStream out = new FileOutputStream(fileDir, true);
 
