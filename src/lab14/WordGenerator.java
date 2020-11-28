@@ -13,7 +13,7 @@ public class WordGenerator {
             for(int j=0; j<10; j++){
                 for(int k=0; k<12; k++){
                     for(int l=0; l<12; l++){
-                        for (int m=1; m<200; m++){
+                        for (int m=1; m < 200; m++){
                             carNumbers.add(patternWords[i] + patternNumbers[j] + patternWords[k] + patternWords[l] + String.valueOf(m));
                         }
                     }
