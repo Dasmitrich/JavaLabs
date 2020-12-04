@@ -9,6 +9,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class Run {
+
+    //ИСХОДНЫЕ ФОТО ХРАНЯТСЯ В ПАПКЕ IMAGE
+    //КОНВЕРТИРОВАННЫЕ В ПАПКЕ imgResized
+
     File srcFile = new File("image");
     File dstFolder = new File("imgResized");
     File[] files = srcFile.listFiles();
@@ -35,15 +39,13 @@ public class Run {
                 if(i < 8) {
                     File[] tempFile = new File[division];
                     System.arraycopy(files, division * i, tempFile, 0, tempFile.length);
-                    ResizingThreads runthread = new ResizingThreads(tempFile, dstFolder);
-                    System.out.println("Thread " + i + " started");
+                    ResizingThreads runthread = new ResizingThreads(tempFile, dstFolder, i);
                     runthread.start();
                 }
                 else {
                     File[] tempFile = new File[files.length - division * i];
                     System.arraycopy(files, division * i, tempFile, 0, files.length - division * i);
-                    ResizingThreads runthread = new ResizingThreads(tempFile, dstFolder);
-                    System.out.println("Thread " + i + " started");
+                    ResizingThreads runthread = new ResizingThreads(tempFile, dstFolder, i);
                     runthread.start();
                 }
             }

@@ -10,17 +10,18 @@ public class ResizingThreads extends Thread {
 
     private File[] files;
     private File dstFolder;
+    private long i;
 
-    public ResizingThreads(File[] files, File dstFolder) {
+    public ResizingThreads(File[] files, File dstFolder, long i) {
         this.files = files;
         this.dstFolder = dstFolder;
-        //System.out.println("constructor done");
+        this.i = i;
     }
 
     @Override
     public void run() {
         long timeStart = System.currentTimeMillis();
-
+        System.out.println("Thread " + i + " started");
         try {
             if (!Files.exists(Paths.get("imgResized"))) {
                 Files.createDirectories(Paths.get("imgResized"));
