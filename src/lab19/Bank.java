@@ -22,8 +22,8 @@ public class Bank extends Thread {
         return random.nextBoolean();
     }
 
-    public void transfer(String fromAccountNum, String toAccountNum, long amount) throws InterruptedException {
-        synchronized (this) {
+    public synchronized void transfer(String fromAccountNum, String toAccountNum, long amount) throws InterruptedException {
+
             if (!isFraud(fromAccountNum, toAccountNum, amount)) {
                 System.out.println("Счета заблокированы: " + fromAccountNum + " , " + toAccountNum);
                 this.accounts.get(fromAccountNum).blockUser();
@@ -37,15 +37,13 @@ public class Bank extends Thread {
                     System.out.println("Деньги успешно переведены!");
                 }).start();
             }
-        }
     }
 
-    public void getBalance(String accountNum) {
-        synchronized (this) {
+    public synchronized void getBalance(String accountNum) {
             new Thread(() -> {
                 System.out.println("Ваш остаток по счету: " + this.accounts.get(accountNum).getSum());
             }).start();
-        }
+
     }
 
     public void run(){
